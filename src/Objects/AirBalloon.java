@@ -25,6 +25,7 @@ public class AirBalloon {
         gr.setColor(new Color(255, 128, 0));
         gr.fillOval(x, y, getVal(1.3), height);
 
+
         int[] xPoints = {
                 x + getVal(0.07),                  // верх лево
                 x + width + getVal(0.235),          // верх право
@@ -38,7 +39,13 @@ public class AirBalloon {
                 y + height + getVal(0.7),         // низ право
                 y + height + getVal(0.7)          // низ лево
         };
+        GradientPaint gp = new GradientPaint(
+                xPoints[0], yPoints[0], new Color(255, 128, 0),
+                xPoints[2], yPoints[2], new Color(186, 116, 50)
+        );
+        gr.setPaint(gp);
         gr.fillPolygon(xPoints, yPoints, 4);
+        gr.setPaint(null);
 
         gr.setColor(new Color(66, 63, 61));
         gr.fillRect(x + 40 + getVal(0.235), y + height + getVal(0.7), getVal(0.05), getVal(0.2));
@@ -46,6 +53,32 @@ public class AirBalloon {
 
         gr.setColor(new Color(154, 120, 120));
         gr.fillRect(x + 40 + getVal(0.235), y + height + getVal(0.8), getVal(0.3), getVal(0.2));
+
+        int arcWidth = getVal(1.3);
+        int arcHeight = height;
+        int arcX = x;
+        int arcY = y;
+        int startAngle = 0;
+        int arcAngle = 36; //360 / 10
+
+        gr.setColor(Color.YELLOW);
+        gr.fillArc(arcX, arcY, arcWidth, arcHeight, startAngle, arcAngle);
+        startAngle += arcAngle;
+
+        gr.setColor(Color.RED);
+        gr.fillArc(arcX, arcY, arcWidth, arcHeight, startAngle, arcAngle);
+        startAngle += arcAngle;
+
+        gr.setColor(Color.WHITE);
+        gr.fillArc(arcX, arcY, arcWidth, arcHeight, startAngle, arcAngle);
+        startAngle += arcAngle;
+
+        gr.setColor(Color.PINK);
+        gr.fillArc(arcX, arcY, arcWidth, arcHeight, startAngle, arcAngle);
+        startAngle += arcAngle;
+
+        gr.setColor(Color.MAGENTA);
+        gr.fillArc(arcX, arcY, arcWidth, arcHeight, startAngle, arcAngle);
 
 
     }

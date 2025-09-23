@@ -2,6 +2,7 @@ import Objects.*;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.Random;
 
 public class DrawPanel extends JPanel {
@@ -9,8 +10,13 @@ public class DrawPanel extends JPanel {
     private Windmill windmill;
     private Cloud[] clouds;
     private Flower[] flowers;
+    private Tree[] trees;
+    private PathToMill path;
     private boolean cloudsInitialized = false;
     private boolean flowersInitialized = false;
+    private boolean pathInitialized = false;
+    private boolean treesInitialized = false;
+
 
 
     public DrawPanel() {
@@ -38,23 +44,83 @@ public class DrawPanel extends JPanel {
 
     private void initializeFlowers(Graphics2D g2d) {
         Random rnd = new Random();
-        flowers = new Flower[13];
+        flowers = new Flower[12];
+        Polygon roadPolygon = path.getRoadPolygon();
+        final int MIN_DISTANCE = 50;
 
-        flowers[0] = new Flower(g2d, rnd.nextInt(250) + 70, rnd.nextInt(100) + 500, rnd.nextInt(15) + 15, new int[]{49, 103, 189});
-        flowers[1] = new Flower(g2d, rnd.nextInt(250) + 70, rnd.nextInt(100) + 500, rnd.nextInt(15) + 15, new int[]{223, 228, 237});
-        flowers[2] = new Flower(g2d, rnd.nextInt(520) + 250, rnd.nextInt(100) + 500, rnd.nextInt(15) + 15, new int[]{190, 120, 222});
-        flowers[3] = new Flower(g2d, rnd.nextInt(520) + 250, rnd.nextInt(100) + 500, rnd.nextInt(15) + 15, new int[]{64, 152, 214});
-        flowers[4] = new Flower(g2d, rnd.nextInt(870) + 520, rnd.nextInt(100) + 500, rnd.nextInt(15) + 15, new int[]{237, 194, 74});
-        flowers[5] = new Flower(g2d, rnd.nextInt(870) + 200, rnd.nextInt(100) + 500, rnd.nextInt(15) + 15, new int[]{235, 77, 66});
-        flowers[6] = new Flower(g2d, rnd.nextInt(250) + 70, rnd.nextInt(100) + 500, rnd.nextInt(15) + 15, new int[]{49, 103, 189});
-        flowers[7] = new Flower(g2d, rnd.nextInt(250) + 70, rnd.nextInt(100) + 500, rnd.nextInt(15) + 15, new int[]{223, 228, 237});
-        flowers[8] = new Flower(g2d, rnd.nextInt(520) + 250, rnd.nextInt(100) + 500, rnd.nextInt(15) + 15, new int[]{190, 120, 222});
-        flowers[9] = new Flower(g2d, rnd.nextInt(520) + 250, rnd.nextInt(100) + 500, rnd.nextInt(15) + 15, new int[]{64, 152, 214});
-        flowers[10] = new Flower(g2d, rnd.nextInt(870) + 520, rnd.nextInt(100) + 500, rnd.nextInt(15) + 15, new int[]{237, 194, 74});
-        flowers[11] = new Flower(g2d, rnd.nextInt(870) + 200, rnd.nextInt(100) + 500, rnd.nextInt(15) + 15, new int[]{235, 77, 66});
-        flowers[12] = new Flower(g2d, rnd.nextInt(870) + 200, rnd.nextInt(100) + 500, rnd.nextInt(15) + 15, new int[]{235, 77, 66});
+        int[][] xRanges = {
+                {800, 400}, {800, 400}, {800, 400}, {800, 400}, {800, 400}, {800, 400},
+                {800, 400}, {800, 400}, {800, 400}, {800, 400}, {800, 400}, {800, 400}, {800, 400}
+        };
+        int[][] colors = {
+                {49, 103, 189}, {223, 228, 237}, {190, 120, 222}, {64, 152, 214}, {237, 194, 74},
+                {235, 77, 66}, {49, 103, 189}, {223, 228, 237}, {190, 120, 222}, {64, 152, 214},
+                {237, 194, 74}, {235, 77, 66}, {235, 77, 66}
+        };
+
+        for (int i = 0; i < flowers.length; i++) {
+            int x, y, width;
+            int[] range = xRanges[i];
+            int[] color = colors[i];
+            boolean isTooClose;
+            boolean isOnRoad;
+
+            do {
+                x = rnd.nextInt(range[0]) + range[1];
+                y = rnd.nextInt(200) + 450;
+                width = rnd.nextInt(15) + 15;
+
+                int stemBaseX = x + Flower.getVal(width, 0.47);
+                int stemBaseY = y + Flower.getVal(width, 0.9) + Flower.getVal(width, 3);
+                isOnRoad = roadPolygon.contains(stemBaseX, stemBaseY);
+
+                isTooClose = false;
+                for (int j = 0; j < i; j++) {
+                    double distance = Math.sqrt(Math.pow(x - flowers[j].getX(), 2) + Math.pow(y - flowers[j].getY(), 2));
+                    if (distance < MIN_DISTANCE) {
+                        isTooClose = true;
+                        break;
+                    }
+                }
+            } while (isOnRoad || isTooClose);
+
+            flowers[i] = new Flower(g2d, x, y, width, color);
+        }
 
         flowersInitialized = true;
+    }
+
+    private void initializeTrees(Graphics2D g2d) {
+        Random rnd = new Random();
+        trees = new Tree[3];
+        ArrayList<Point> treePositions = new ArrayList<>();
+        int minDistance = 100;
+
+        for (int i = 0; i < trees.length; i++) {
+            int x, y;
+            boolean positionFound = false;
+
+            while (!positionFound) {
+                x = rnd.nextInt(250) + 50;
+                y = rnd.nextInt(200) + 450;
+
+                boolean tooClose = false;
+                for (Point p : treePositions) {
+                    double distance = Math.sqrt(Math.pow(x - p.x, 2) + Math.pow(y - p.y, 2));
+                    if (distance < minDistance) {
+                        tooClose = true;
+                        break;
+                    }
+                }
+
+                if (!tooClose) {
+                    trees[i] = new Tree(g2d, x, y, rnd.nextInt(100) + 100);
+                    treePositions.add(new Point(x, y));
+                    positionFound = true;
+                }
+            }
+        }
+        treesInitialized = true;
     }
 
 
@@ -85,6 +151,14 @@ public class DrawPanel extends JPanel {
         windmill.setRotation(rotationAngle);
         windmill.draw();
 
+        if (!treesInitialized) {
+            initializeTrees(g2d);
+        }
+        for (Tree tree : trees) {
+            Tree tempTree = new Tree(g2d, tree.getX(), tree.getY(), tree.getHeight());
+            tempTree.drawTree();
+        }
+
         AirBalloon airballoon1 = new AirBalloon(g2d, 200, 150, 150, 150);
         airballoon1.draw();
 
@@ -99,8 +173,15 @@ public class DrawPanel extends JPanel {
             Cloud tempCloud = new Cloud(g2d, cloud.getX(), cloud.getY(), cloud.getWidth());
             tempCloud.drawCloud();
         }
-        PathToMill path = new PathToMill(g2d, 820, 470, 300, 40);
+
+        if (!pathInitialized) {
+            path = new PathToMill(g2d, 820, 470, 300, 40);
+            pathInitialized = true;
+        }
+
+        path.setGraphics(g2d);
         path.drawPath();
+
         if (!flowersInitialized) {
             initializeFlowers(g2d);
         }
@@ -109,7 +190,6 @@ public class DrawPanel extends JPanel {
             Flower tempFlower = new Flower(g2d, flower.getX(), flower.getY(), flower.getWidth(), flower.getColor());
             tempFlower.drawFlower();
         }
-
 
 
     }

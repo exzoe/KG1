@@ -112,26 +112,22 @@ public class Windmill {
         g.rotate(rotation);
 
 
-
-        // Верхний слой - толстые лопасти ("====")
         for (int i = 0; i < 4; i++) {
             int totalLength = getVal(size, 1.8);
 
-            // Тонкое начало "--" (30% длины)
-            g.setColor(new Color(69, 58, 58)); // Светлый цвет для верхнего слоя
+            g.setColor(new Color(69, 58, 58));
             int thinPartLength = totalLength * 3 / 10;
             int thinWidth = getVal(size, 0.1);
             g.fillRect(-thinWidth/2, -thinWidth/2, thinPartLength, thinWidth);
 
-            // Толстый конец "====" (70% длины)
-            g.setColor(new Color(213, 220, 9)); // Светлый цвет для верхнего слоя
+            g.setColor(new Color(213, 220, 9));
 
             int thickPartLength = totalLength - thinPartLength;
             int thickWidth = getVal(size, 0.3);
             g.fillRect(-thickWidth/2 + thinPartLength, -thickWidth/2,
                     thickPartLength, thickWidth);
-            g.setColor(new Color(180, 170, 50)); // Более темный желтый для полосок
-            int stripeCount = 3; // Количество полосок
+            g.setColor(new Color(180, 170, 50));
+            int stripeCount = 3;
             int stripeSpacing = thickPartLength / (stripeCount + 1);
 
             for (int j = 1; j <= stripeCount; j++) {
@@ -145,7 +141,6 @@ public class Windmill {
             g.rotate(Math.PI / 2);
         }
 
-        // Центральный круг (перекрывает оба слоя)
         g.setColor(new Color(141, 143, 74));
         int centerSize = getVal(size, 0.4);
         g.fillOval(-centerSize/2, -centerSize/2, centerSize, centerSize);

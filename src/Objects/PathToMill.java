@@ -8,6 +8,7 @@ public class PathToMill {
     private final int y;
     private final int roadWidth;
     private final int roadHeight;
+    private Polygon roadPolygon;
 
     public PathToMill(Graphics2D gr, int x, int y, int roadWidth, int roadHeight) {
         this.gr = gr;
@@ -15,10 +16,14 @@ public class PathToMill {
         this.y = y;
         this.roadWidth = roadWidth;
         this.roadHeight = roadHeight;
+        createPolygon();
     }
 
+    public void setGraphics(Graphics2D gr) {
+        this.gr = gr;
+    }
 
-    public void drawPath() {
+    private void createPolygon() {
         int pointsCount = 40;
         int[] xPoints = new int[pointsCount * 2];
         int[] yPoints = new int[pointsCount * 2];
@@ -26,7 +31,6 @@ public class PathToMill {
         for (int i = 0; i < pointsCount; i++) {
             double progress = (double)i / (pointsCount - 1);
 
-            // Позиция по Y (вертикальное движение)
             int currentY = y + (int)(roadWidth * progress);
 
             int waveAmplitude = 20;
@@ -36,16 +40,21 @@ public class PathToMill {
             double widthFactor = 1.0 + (progress * 6.5);
             int currentRoadHeight = (int)(roadHeight * widthFactor);
 
-            // левая точка
             xPoints[i] = centerX - currentRoadHeight / 2;
             yPoints[i] = currentY;
 
-            // правая точка (зеркально левой)
             xPoints[pointsCount * 2 - 1 - i] = centerX + currentRoadHeight / 2;
             yPoints[pointsCount * 2 - 1 - i] = currentY;
         }
+        this.roadPolygon = new Polygon(xPoints, yPoints, pointsCount * 2);
+    }
 
+    public Polygon getRoadPolygon() {
+        return this.roadPolygon;
+    }
+
+    public void drawPath() {
         gr.setColor(Color.GRAY);
-        gr.fillPolygon(xPoints, yPoints, pointsCount * 2);
+        gr.fillPolygon(roadPolygon);
     }
 }
