@@ -3,17 +3,15 @@ package Objects;
 import java.awt.*;
 
 public class Sun {
-    private final Graphics2D gr;
     private final int x;
     private final int y;
 
-    public Sun(Graphics2D gr, int x, int y) {
-        this.gr = gr;
+    public Sun(int x, int y) {
         this.x = x;
         this.y = y;
     }
 
-    public void draw() {
+    public void draw(Graphics2D gr) {
         gr.setColor(Color.yellow);
         gr.fillOval(x, y, 175, 175);
 

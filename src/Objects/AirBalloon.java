@@ -3,14 +3,12 @@ package Objects;
 import java.awt.*;
 
 public class AirBalloon {
-    private final Graphics2D gr;
     private final int x;
     private final int y;
     private final int width;
     private final int height;
 
-    public AirBalloon(Graphics2D gr, int x, int y, int width, int height) {
-        this.gr = gr;
+    public AirBalloon(int x, int y, int width, int height) {
         this.x = x;
         this.y = y;
         this.width = width;
@@ -21,10 +19,9 @@ public class AirBalloon {
         return (int)(width * cnt);
     }
 
-    public void draw() {
+    public void draw(Graphics2D gr) {
         gr.setColor(new Color(255, 128, 0));
         gr.fillOval(x, y, getVal(1.3), height);
-
 
         int[] xPoints = {
                 x + getVal(0.07),                  // верх лево
@@ -79,8 +76,5 @@ public class AirBalloon {
 
         gr.setColor(Color.MAGENTA);
         gr.fillArc(arcX, arcY, arcWidth, arcHeight, startAngle, arcAngle);
-
-
     }
-
 }

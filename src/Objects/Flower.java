@@ -1,18 +1,15 @@
 package Objects;
 
-import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 
 public class Flower {
-    private final Graphics2D gr;
     private final int x;
     private final int y;
     private final int width;
     private final int[] color;
 
-    public Flower(Graphics gr, int x, int y, int width, int[] color) {
-        this.gr = (Graphics2D) gr;
+    public Flower(int x, int y, int width, int[] color) {
         this.x = x;
         this.y = y;
         this.width = width;
@@ -34,7 +31,7 @@ public class Flower {
         return (int)(width * cnt);
     }
 
-    public void drawFlower() {
+    public void drawFlower(Graphics2D gr) {
         gr.setColor(new Color(72, 140, 56));
         gr.fillRect(x + getVal(width, 0.47), y + getVal(width, 0.9), getVal(width, 0.3), getVal(width, 3));
 

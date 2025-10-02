@@ -3,24 +3,18 @@ package Objects;
 import java.awt.*;
 
 public class PathToMill {
-    private Graphics2D gr;
     private final int x;
     private final int y;
     private final int roadWidth;
     private final int roadHeight;
     private Polygon roadPolygon;
 
-    public PathToMill(Graphics2D gr, int x, int y, int roadWidth, int roadHeight) {
-        this.gr = gr;
+    public PathToMill(int x, int y, int roadWidth, int roadHeight) {
         this.x = x;
         this.y = y;
         this.roadWidth = roadWidth;
         this.roadHeight = roadHeight;
         createPolygon();
-    }
-
-    public void setGraphics(Graphics2D gr) {
-        this.gr = gr;
     }
 
     private void createPolygon() {
@@ -53,7 +47,7 @@ public class PathToMill {
         return this.roadPolygon;
     }
 
-    public void drawPath() {
+    public void drawPath(Graphics2D gr) {
         gr.setColor(Color.GRAY);
         gr.fillPolygon(roadPolygon);
     }

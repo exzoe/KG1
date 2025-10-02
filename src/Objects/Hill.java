@@ -3,15 +3,13 @@ package Objects;
 import java.awt.*;
 
 public class Hill {
-    private Graphics2D gr;
     private int x;
     private int y;
     private int width;
     private int height;
     private int[] color;
 
-    public Hill(Graphics2D gr, int x, int y, int width, int height, int[] color) {
-        this.gr = gr;
+    public Hill(int x, int y, int width, int height, int[] color) {
         this.x = x;
         this.y = y;
         this.width = width;
@@ -19,7 +17,7 @@ public class Hill {
         this.color = color;
     }
 
-    public void drawSmoothHill() {
+    public void drawSmoothHill(Graphics2D gr) {
         int pointsCount = 40;
         int[] xPoints = new int[pointsCount];
         int[] yPoints = new int[pointsCount];
@@ -33,6 +31,4 @@ public class Hill {
         gr.setColor(new Color(color[0], color[1], color[2]));
         gr.fillPolygon(xPoints, yPoints, pointsCount);
     }
-
-
 }

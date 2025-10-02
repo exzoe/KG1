@@ -3,13 +3,11 @@ package Objects;
 import java.awt.*;
 
 public class Cloud {
-    private final Graphics2D gr;
     private final int x;
     private final int y;
     private final int width;
 
-    public Cloud(Graphics2D gr, int x, int y, int width) {
-        this.gr = gr;
+    public Cloud(int x, int y, int width) {
         this.x = x;
         this.y = y;
         this.width = width;
@@ -23,7 +21,7 @@ public class Cloud {
         return (int)(width * cnt);
     }
 
-    public void drawCloud() {
+    public void drawCloud(Graphics2D gr) {
         gr.setColor(Color.WHITE);
         gr.fillOval(x, y + getVal(0.22), getVal(0.32), getVal(0.32));
         gr.fillOval(x + getVal(0.67), y + getVal(0.22), getVal(0.32), getVal(0.32));

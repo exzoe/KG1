@@ -4,14 +4,12 @@ import java.awt.*;
 import java.awt.geom.AffineTransform;
 
 public class Windmill {
-    private final Graphics2D g;
     private final int x;
     private final int y;
     private final int size;
     private double rotation;
 
-    public Windmill(Graphics2D g, int x, int y, int size) {
-        this.g = g;
+    public Windmill(int x, int y, int size) {
         this.x = x;
         this.y = y;
         this.size = size;
@@ -22,20 +20,23 @@ public class Windmill {
         this.rotation = rotation;
     }
 
-    public void draw() {
-        drawTower();
-        drawWindow();
-        drawDoor();
-        drawRoof();
-        drawBlades();
+    public double getRotation() {
+        return rotation;
+    }
 
+    public void draw(Graphics2D g) {
+        drawTower(g);
+        drawWindow(g);
+        drawDoor(g);
+        drawRoof(g);
+        drawBlades(g);
     }
 
     private int getVal(int value, double cnt) {
         return (int)(value * cnt);
     }
 
-    private void drawTower() {
+    private void drawTower(Graphics2D g) {
         g.setColor(new Color(189, 129, 70));
 
         int[] xPoints = {
@@ -54,7 +55,7 @@ public class Windmill {
         g.fillPolygon(xPoints, yPoints, 4);
     }
 
-    private void drawRoof() {
+    private void drawRoof(Graphics2D g) {
         g.setColor(new Color(222, 71, 60));
 
         int roofBaseY = y - getVal(size,2.5);
@@ -77,7 +78,7 @@ public class Windmill {
         g.setColor(new Color(180, 50, 40));
     }
 
-    private void drawWindow(){
+    private void drawWindow(Graphics2D g){
         g.setColor(new Color(200, 230, 255));
         int windowSize = getVal(size, 0.4);
         int windowX = x - windowSize/2;
@@ -90,7 +91,7 @@ public class Windmill {
         g.drawLine(windowX, y - getVal(size, 1.7), windowX + windowSize, y - getVal(size, 1.7));
     }
 
-    private void drawDoor(){
+    private void drawDoor(Graphics2D g){
         g.setColor(new Color(99, 86, 66));
         int doorWidth = getVal(size, 0.4);
         int doorHeight = getVal(size, 0.7);
@@ -102,7 +103,7 @@ public class Windmill {
         g.fillOval(x + doorWidth/4, y - doorHeight/2, getVal(size,0.1), getVal(size,0.1));
     }
 
-    private void drawBlades() {
+    private void drawBlades(Graphics2D g) {
         AffineTransform oldTransform = g.getTransform();
 
         int centerX = x;
@@ -110,7 +111,6 @@ public class Windmill {
 
         g.translate(centerX, centerY);
         g.rotate(rotation);
-
 
         for (int i = 0; i < 4; i++) {
             int totalLength = getVal(size, 1.8);
